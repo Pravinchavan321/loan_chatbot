@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Eligibility Checker</title>
+</head>
+<body>
+    <h1>Loan Eligibility Checker</h1>
+    <form id="loanForm">
+        <label>Age:</label>
+        <input type="number" id="age" required><br>
+        <label>Income:</label>
+        <input type="number" id="income" required><br>
+        <label>Employment Status:</label>
+        <select id="employment_status">
+            <option value="employed">Employed</option>
+            <option value="self-employed">Self-Employed</option>
+            <option value="unemployed">Unemployed</option>
+        </select><br>
+        <label>Credit Score (Optional):</label>
+        <input type="number" id="credit_score"><br>
+        <button type="submit">Check Eligibility</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById("loanForm").onsubmit = async function(event) {
+            event.preventDefault();
+            const data = {
+                age: parseInt(document.getElementById("age").value),
+                income: parseInt(document.getElementById("income").value),
+                employment_status: document.getElementById("employment_status").value,
+                credit_score: document.getElementById("credit_score").value ? parseInt(document.getElementById("credit_score").value) : null
+            };
+            
+            const response = await fetch("/check-loan", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            document.getElementById("result").innerText = result.result;
+        };
+    </script>
+</body>
+</html>
